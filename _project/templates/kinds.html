@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>kinds</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <a href="{% url "home" %}" class="backbtn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="leftcon" style="width: 100%;">
+            <form method="post" action="" class="othersell">
+                <h3>اضافة نوع</h3>
+                    {% csrf_token %}
+                    <div class="addinputs">
+                        <input name='name'  type="text" id="papers" class="search_bar" required placeholder="النوع">
+                    </div>
+                    <button name="addKind" class="sellbtn">اضافة</button>
+            </form>
+            <div class="status">
+                <h3>جميع الانواع</h3>
+                <div style="width: 100%; overflow: scroll; height: fit-content;">
+                    {% if kinds %}
+                    <table class="sellstable">
+                        <thead>
+                            <tr>
+                                <th>النوع</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        {% for kind in kinds %}
+                        <tbody>
+                            <tr>
+                                <td>{{kind.name}}</td>
+                                <td><button class="sellsdel" id="sellsdel"  metadata='
+                                    <form method="post" action="{% url "kindDelete" kind.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">حذف المصروف</h3>
+                                            <h3 style="color:#FF0000;">"حذف المصروف سيؤدى الى حذف جميع المتعلقات به"</h3>
+                                            <br>
+                                            <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="kindDelete" class="sellbtn">حذف</button>
+                                    </form>
+                                    '><i class="fa-solid fa-trash-can"></i></button></td>
+                            </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+                    {% else %}
+                    <h2 style="width: 100%;text-align: center;color: #303C54;margin-bottom: 20px;">لا يوجد انواع</h2>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const sellsdel = document.querySelectorAll('#sellsdel')
+        const windowcon = document.getElementById('windowcon')
+        const closedetwin = document.getElementById('closedetwin')
+        sellsdel.forEach((sellsdel)=>{
+            sellsdel.onclick=()=>{
+                const metadata = sellsdel.getAttribute('metadata')
+                windowcon.style.visibility = 'visible'
+                windowcon.style.opacity = '1'
+                document.getElementById('detailcontainer').innerHTML=metadata
+                
+            }
+        })
+        closedetwin.addEventListener('click',()=>{
+            windowcon.style.top='0'
+            windowcon.style.visibility='hidden'
+            windowcon.style.opacity='0'
+        })
+    </script>
+</body>
+</html>

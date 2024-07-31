@@ -1,0 +1,333 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>daycome</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    <header>
+        <div class="main">
+            <div class="minhead">
+                <i class="fa-solid fa-bars" id="rightconexpend"></i>
+            </div>
+            <ul>
+                <li class="selected"><a href="{% url "daycome" %}">صفحة الادمن</a></li>
+            </ul>
+        </div>
+        <div class="username">
+                <a href="{% url "logout" %}"><i class="fa-solid fa-power-off"></i></a>
+                <h3>{{user.username}}<h3>
+        </div>
+    </header>
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer" style="color: #303C54;">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <div class="rightcon">
+            <ul>
+                <a href="{% url "home" %}">
+                    <li>
+                        <i class="fa-solid fa-house-circle-check"></i>
+                        <span>الرئيسية</span>
+                    </li>
+                </a>
+                <a href= "{% url "sales" %}">
+                    <li>
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>بيع</span>
+                    </li>
+                </a>
+                <a href="{% url "tempsales" %}">
+                    <li>
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <span>الاجل</span>
+                    </li>
+                </a>
+                <a href="{% url "loses" %}">
+                    <li>
+                        <i class="fa-solid fa-file-export"></i>
+                        <span>المصروفات</span>
+                    </li>
+                </a>
+                <a href="{% url "items" %}">
+                    <li >
+                        <i class="fa-brands fa-airbnb"></i>
+                        <span>اضافة بضاعة</span>
+                    </li>
+                </a>
+                <a href="{% url "profits" %}">
+                    <li>
+                        <i class="fa-solid fa-table-cells"></i>
+                        <span>المبيعات</span>
+                    </li>
+                </a>
+                <a href="{% url "shorts" %}">
+                    <li>
+                        <i class="fa-solid fa-arrow-down-short-wide"></i>
+                        <span>النواقص</span>
+                    </li>
+                </a>
+                <a href="{% url "daycome" %}">
+                    <li class="activeli">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span>صفحة الادمن</span>
+                    </li>
+                </a>
+            </ul>
+        </div>
+        <div class="leftcon">
+            <div class="status">
+                <ul class="secnav">
+                    <li class="active"><a href="{% url "daycome" %}">تقفيل اليوم</a></li>
+                    <li><a href="{% url "admin" %}">لوحة الادمن</a></li>
+                    <li><a href="{% url "employees" %}">الموظفين</a></li>
+                    <li><a href="{% url "safe" %}">الخزنة</a></li>
+                </ul>
+            </div>
+            <div class="status">
+                <div class="addsell">
+                <form method="post" action="" style="width: 100%;display: flex;align-items: center;justify-content: space-around;">
+                    {% csrf_token %}
+                        <h2 class="daytxt">تقفيل يوم : </h2>
+                        <div class="wraper">
+                            <div class="first">
+                                <input name="dateInput" value="" type="date" id="search_bar" class="search_bar" required  style="border-width: 60px;">
+                            </div>
+                        </div>
+                        <button class="sellbtn" name="show"> عرض</button>
+                    </form> 
+                </div>
+                {% if total_profits >= 0 %}
+                <div class="statuscon">
+                    <div class="statuscards">
+                        <div id="dayincome" metadata='
+                            <div style="width: 100%;color:#000;">
+                                <table class="sellstable" style="width:100%;">
+                                    <thead style="color:#000;">
+                                        <tr style="color:#000;">
+                                            <th style="color:#000;"><h3>اسم العميل</h3></th>
+                                            <th style="color:#000;"><h3>المنتج</h3></th>
+                                            <th style="color:#000;"><h3>المبلغ</h3></th>
+                                            <th style="color:#000;"><h3>المدفوع</h3></th>
+                                            <th style="color:#000;"><h3>التاريخ</h3></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for sale in today_profits %}
+                                        <tr>
+                                            <td><h3>{{sale.client_name}}</h3></td>
+                                            <td><h3>{{sale.item.name}}</h3></td>
+                                            <td>{{sale.total}}</td>
+                                            <td>{{sale.paid}}</td>
+                                            <td>{{sale.date|date:"20y-m-d"}}</td>
+                                        </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                        </div>'>
+                            <h3>الوارد</h3> 
+                            <h2>{{total_profits}} جنيه</h2>
+                        </div>
+                        <div id="">
+                            <h3>مدفوعات من العملاء </h3>
+                            <h2>{{payments}} جنيه</h2>
+                        </div>
+                        <div id="dayloses" metadata='
+                        <div style="width: 100%;height: fit-content;">
+                            <table class="sellstable" style="width:100%;">
+                                <thead style="color:#000;">
+                                    <tr>
+                                        <th style="color:#000;"><h3>النوع</h3></th>
+                                        <th style="color:#000;"><h3>المبلغ</h3></th>
+                                        <th style="color:#000;"><h3>تاريخ</h3></th>
+                                        <th style="color:#000;"><h3>ملاحظات</h3></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for lose in today_loses %}
+                                    <tr>
+                                        <td>{{lose.lose_type}}</td>
+                                        <td>{{lose.lose_money}}</td>
+                                        <td>{{lose.date|date:"20y-m-d"}}</td>
+                                        <td>{{lose.notes}}</td>
+                                        <td></td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                        </div>'>
+                            <h3>المصروفات</h3> 
+                            <h2>{{total_loses}} جنيه</h2>
+                        </div>
+                        <div id="">
+                            <h3>مدفوعات الى الموردين </h3>
+                            <h2>{{total_supplier_pay}} جنيه</h2>
+                        </div>
+                        <div id="dayprofit">
+                            <h3>الصافى </h3>
+                            <h2>{{net_profit}} جنيه</h2>
+                        </div>
+                        <div id="">
+                            <h3>المكسب </h3>
+                            <h2>{{total_win}} جنيه</h2>
+                        </div>
+                        <div id="">
+                            <h3>المحفظة الالكترونية</h3>
+                            <h2>{{safe.wallet}} جنيه</h2>
+                        </div>
+                        <div id="">
+                            <h3>الدرج</h3>
+                            <h2>{{safe.cash}} جنيه</h2>
+                        </div>
+                    </div>
+                    <div class="statusimg">
+                        <img src="{% static "images/daycome.png" %}" alt="">
+                        <a style="text-align: center;" class="sellbtn" id="daycheck"  metadata='
+                            <form method="POST" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                {% csrf_token %}
+                                <input value="{{selected_date}}" name="date" type="hidden">
+                                <h3 style="color:#3D4B64;">تقفيل يوم</h3>
+                                <br>
+                                <h3 style="color:#3D4B64;">{{selected_date}}</h3>
+                                <div class="addinputs">
+                                    <input value="{{total_profits}}" min="0" name="total_profits" type="number" id="day_income" class="search_bar" required placeholder="الوارد">
+                                    <input value="{{payments}}" min="0" name="payments" type="number" id="day_income" class="search_bar" required placeholder="المدفوعات">
+                                    <input value="{{total_loses}}" min="0" name="total_loses"  onkeyup="daycheckfun()" type="number" id="day_loses" class="search_bar" required placeholder="المصروفات">
+                                    <input value="{{total_supplier_pay}}" min="0" name="total_supplier_pay"  onkeyup="daycheckfun()" type="number" id="day_loses" class="search_bar" required placeholder="الديون">
+                                    <input value="{{net_profit}}" name="net_profit" type="number" id="day_remain" class="search_bar" readonly placeholder="الصافى">
+                                    <input value="{{total_win}}" name="win" type="number" id="day_remain" class="search_bar" readonly placeholder="المكسب">
+                                    <input value="{{safe.cash}}" name="cash" type="number" id="day_remain" class="search_bar" readonly placeholder="الدرج">
+                                    <input value="{{safe.wallet}}" name="wallet" type="number" id="day_remain" class="search_bar" readonly placeholder="المحفظة">
+                                </div>
+                                <button name="dayCome" class="sellbtn">تقفيل</button>
+                            </form>
+                        '>تقفيل اليوم</a>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            <div class="status">
+                <h2>التقفيــــــــــلات</h2>
+                <form method="POST" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                    {% csrf_token %}
+                </form> 
+                <div style="width: 100%; overflow: scroll;">
+                    {% if daycomes %}
+                    <table class="sellstable">
+                        <thead>
+                            <tr>
+                                <th>الوارد</th>
+                                <th>المدفوعات</th>
+                                <th>المصروفات</th>
+                                <th>الديون</th>
+                                <th>الصافى</th>
+                                <th>المكسب</th>
+                                <th>الدرج</th>
+                                <th>المحفظة الالكترونية</th>
+                                <th>التاريخ</th>
+                                <th>حذف</th>
+                                <th>تعديل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for daycome in daycomes %}
+                            <tr>
+                                <td>{{daycome.income}}</td>
+                                <td>{{daycome.payments}}</td>
+                                <td>{{daycome.loses}}</td>
+                                <td>{{daycome.total_supplier_pay}}</td>
+                                <td>{{daycome.net_profit}}</td>
+                                <td>{{daycome.win}}</td>
+                                <td>{{daycome.cash}}</td>
+                                <td>{{daycome.wallet}}</td>
+                                <td>{{daycome.date|date:"20y-m-d"}}</td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                    <form method="post" action="{% url "daycomeDelete" daycome.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">حذف التقفيل</h3>
+                                            <br>
+                                            <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="daycomeDelete" class="sellbtn">حذف</button>
+                                    </form>
+                                    '><i class="fa-solid fa-trash-can"></i></button></td>
+                                    <td><button class="sellsup" id="sellsup" metadata='
+                                        <form method="post" action="{% url "daycomeUpdate" daycome.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                            {% csrf_token %}
+                                            <h3 style="color:#3D4B64;">تعديل التقفيل </h3>
+                                            <div class="addsell">
+                                                <div class="addsell">
+                                                    <input type="hidden" name="date" value="{{ today|date:"Y-m-d" }}">
+                                                    <div class="wraper">
+                                                        <div class="second">
+                                                            <input value="{{daycome.income}}" min="0" name="total_profits" type="number" id="day_income2" class="search_bar" required>
+                                                            <span>الوارد</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wraper">
+                                                        <div class="second">
+                                                            <input value="{{daycome.loses}}" min="0" name="total_loses" type="number" onkeyup="daycheckfun2()" id="day_loses2" class="search_bar" required>
+                                                            <span>المصروفات</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="wraper">
+                                                        <div class="second">
+                                                            <input value="{{daycome.net_profit}}" name="net_profit" type="number" id="day_remain2" class="search_bar" required>
+                                                            <span>الصافى</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        <button name="daycomeUpdate" class="sellbtn">تعديل</button>
+                                    </form>
+                                    '><i class="fa-solid fa-pencil"></i></button></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="btnnav">
+                            <div>
+                                {% if daycomes.has_previous %}
+                                <a href="?page=1"><i class="fa-solid fa-angles-right"></i></a>
+                                <a href="?page={{ daycomes.previous_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>
+                                {% endif %}
+                                <p>صفحة {{ daycomes.number }} من {{ daycomes.paginator.num_pages }}</p>
+                            </div>
+                            <div>
+                                {% if daycomes.has_next %}
+                                <a href="?page={{ daycomes.next_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>
+                                <a href="?page={{ daycomes.paginator.num_pages }}"><i class="fa-solid fa-angles-left"></i></a>
+                                {% endif %}
+        
+                            </div>
+                        </div>
+                        {% else %}
+                        <h2 style="width: 100%;text-align: center;color: #303C54;margin-bottom: 20px;">لا يوجد تقفيلات</h2>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src=" {% static "js/daycome.js" %} "></script>
+    <script>
+
+    </script>
+</body>
+</html>

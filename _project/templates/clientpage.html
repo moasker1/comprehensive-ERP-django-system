@@ -1,0 +1,407 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>client page</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer" style="overflow-y: auto;">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <a href="{% url "clients" %}" class="backbtn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="leftcon" style="width: 100%;">
+            <div class="status">
+                <h2>صفحــة العميـــــل </h2>
+                <div style="width: 100%;display: flex;justify-content: space-around;align-items: center;padding: 20px 0;">
+                <h2>اسم العميل : <span>{{client.name}}</span></h2>
+                <h2>الرصيد الافتتاحى : <span>{{client.opening_balance}}</span></h2>
+                <h2>عليه : <span>{{client.rest}}</span></h2>
+                </div>
+                <div style="width: 100%;display: flex;justify-content: space-around;align-items: center;padding: 20px 0;">
+                    <button class="sellbtn" id="billbtn"  metadata='
+                    <form method="POST" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                            <h3 style="color:#3D4B64;">تفاصيل البيع</h3>
+                        <div class="addsell" style="display:flex; align-items:start;flex-direction:column;">
+                            <ul style="width:100%;">
+                                <li>اسم العميل : <input name="client_name" type="text" value="{{client.name}}" readonly style="outline:none;border:none;font-size:20px;"></li>
+                                <li>رقم التليفون : <span>{{client.phone}}</span></li>
+                            </ul>
+                            <div style="width:100%; display:flex;align-items:center;justify-content:center;flex-direction:row;gap:10px;position:relative;padding-top:60px;">
+                                <input type="hidden" name="id" id="itemID" value="" >
+                                <div class="wraper" style="width:30%;position:absolute; top:0;z-index:1000;">
+                                    <div class="first">
+                                        <input onfocus="selection()" type="text" name="item" id="prod_input"  class="search_bar"  >
+                                        <span>اسم المنتج</span>
+                                    </div>
+                                    <div class="search_res" id="search_res">
+                                        <table id="suplliersull" style="padding:0;margin:0;width:100%;">
+                                            <th></th>
+                                            <th></th>
+                                            <tbody id="suplliersul">
+                                                {% for item in items %}
+                                                <tr style="width:100%;user-select:none;">
+                                                    <td metakind="{{item.kind.name}}" metaprice="{{item.price}}" metaid="{{item.id}}" style="font-size:15px;">{{item.name}}</td>
+                                                    <td style="font-size:15px;">{{item.kind.name}}</td>
+                                                    <td style="font-size:15px;">{{item.quantity}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input value="" name="kind" type="text" id="kind_input" class="search_bar" readonly >
+                                        <span>النوع</span>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 50%;">
+                                    <div class="second">
+                                        <input name= "date" value="" type="date" id="date_input" class="search_bar" >
+                                        <span>التاريخ</span>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input name= "sale_quantity" value="" type="number" id="quant_input" class="search_bar" >
+                                        <span>الكمية</span>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input name= "sale_price" value="" type="number" id="price_input" class="search_bar" >
+                                        <span>السعر</span>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input name= "paid" value="0" type="number" id="pay_input" class="search_bar" >
+                                        <span>دفع</span>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 70%;margin:10px;">
+                                    <div class="second">
+                                        <select name="method"  style="font-size:18px;" id="search_bar" class="search_bar">
+                                            <option style="font-size:18px;" value="نقدية">نقدية</option>
+                                            <option style="font-size:18px;" value="محفظة">محفظة</option>
+                                        </select>
+                                        <span>طريقة الدفع</span>
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+                        <button name="sell2" class="sellbtn" id="billmakebtn">اضافة</button>
+                    </form>'>بيع</button>
+                    <button class="sellbtn" id="billbtn"  metadata='
+                    <form method="POST" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                            <h3 style="color:#3D4B64;">اضافة دفع</h3>
+                        <div class="addsell" style="display:flex; align-items:start;flex-direction:column;">
+                            <ul style="width:100%;">
+                                <li>اسم العميل : <input name="client_name" type="text" value="{{client.name}}" readonly style="outline:none;border:none;font-size:20px;"></li>
+                                <li>رقم التليفون : <span>{{client.phone}}</span></li>
+                                <li>عليه: <span>{{client.rest}}</span></li>
+                            </ul>
+                            <div style="width:100%; display:flex;align-items:center;justify-content:center;flex-direction:row;gap:10px;position:relative;padding-top:60px;">
+                                <div class="wraper" style="width: 50%;">
+                                    <div class="second">
+                                        <input name= "date" value="" type="date" id="date_input" class="search_bar" >
+                                        <span>التاريخ</span>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input name= "paid" value="" type="number" id="price_input" class="search_bar" >
+                                        <span>المبلغ</span>
+                                    </div>
+                                </div>
+                                <div class="wraper" style="width: 70%;margin:10px;">
+                                    <div class="second">
+                                        <select name="method"  style="font-size:18px;" id="search_bar" class="search_bar">
+                                            <option style="font-size:18px;" value="نقدية">نقدية</option>
+                                            <option style="font-size:18px;" value="محفظة">محفظة</option>
+                                        </select>
+                                        <span>طريقة الدفع</span>
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                        </div>
+                        <button name="addPayment" class="sellbtn" id="billmakebtn">اضافة</button>
+                    </form>'>اضافة دفع</button>
+                </div>
+            </div>
+            <div class="status">
+                <div style="width: 100%; overflow: scroll;">
+                    {% if sales or restores or payments %}
+                    <table class="sellstable" id="myTable">
+                        <thead>
+                            <tr>
+                                <th>المبلغ</th>
+                                <th>المدفوع</th>
+                                <th>طريقة الدفع</th>
+                                <th>التاريخ</th>
+                                <th>حذف</th>
+                                <th>تعديل</th>
+                                <th>تفاصيل</th>
+                                <th>مرتجع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for sale in sales %}
+                            <tr>
+                                <td>{{sale.total}}</td>
+                                <td>{{sale.paid}}</td>
+                                <td>{{sale.method}}</td>
+                                <td>{{sale.date|date:"20y/m/d"}}</td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                    <form method="post" action="{% url "saleDelete" sale.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">حذف عملية بيع</h3>
+                                            <br>
+                                            <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="saleDelete3" class="sellbtn">حذف</button>
+                                    </form>
+                                    '><i class="fa-solid fa-trash-can"></i></button></td>
+                                    <td><button class="sellsup" id="sellsup" metadata='
+                                        <form method="post" action="{% url "saleUpdate" sale.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                            {% csrf_token %}
+                                            <h3 style="color:#3D4B64;">تعديل عملية بيع</h3>
+                                            <div class="addsell" style="padding-top: 70px;">
+                                                <div class="wraper" style="position: absolute;  left: 35%; top: 20%;z-index: 15;">
+                                                    <div class="first">
+                                                        <input value="{{sale.client.name}}" name="client_name" type="text" id="search_bar" class="search_bar" required >
+                                                        <span>اسم العميل</span>
+                                                    </div>
+                                                    <div class="search_res" id="search_res">
+                                                        <table id="suplliersull">
+                                                            <th></th>
+                                                            <tbody id="suplliersul">
+                                                                <tr><td></td></tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="wraper" style="width: 20%;">
+                                                <div class="second">
+                                                    <input value="{{sale.paid}}" min="0" name="paid" type="number" id="search_bar" class="search_bar" required>
+                                                    <span>المدفوع</span>
+                                                </div>
+                                            </div>
+                                            <div class="wraper" style="width: 70%;margin:10px;">
+                                                <div class="second">
+                                                    <select name="method"  style="font-size:18px;" id="search_bar" class="search_bar">
+                                                        <option style="font-size:18px;" value="{{sale.method}}">{{sale.method}}</option>
+                                                        <option style="font-size:18px;" value="نقدية">نقدية</option>
+                                                        <option style="font-size:18px;" value="محفظة">محفظة</option>
+                                                    </select>
+                                                    <span>طريقة الدفع</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button name="saleUpdate3" class="sellbtn">تعديل</button>
+                                    </form>
+                                    '><i class="fa-solid fa-pencil"></i></button></td>
+                                    <td><button class="sellinfo" id="sellsup" metadata='
+                                        <form method="post" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                            <h3 style="color:#3D4B64;">تفاصيل البيع</h3>
+                                            <div class="addsell">
+                                                <ul>
+                                                    <li>اسم المنتج : <span>{{sale.item.name}}</span></li>
+                                                    <li>النوع : <span>{{sale.item.kind.name}}</span></li>
+                                                    <li>الماركة : <span>{{sale.item.prand}}</span></li>
+                                                    <li>سعر بيع المنتج : <span>{{sale.sale_price}}</span></li>
+                                                    <li> الكمية المباعة : <span>{{sale.sale_quantity}}</span></li>
+                                                    <li> اجمالي التكلفة : <span>{{sale.total}}</span></li>
+                                                </ul>
+                                            </div>
+                                    '><i class="fa-solid fa-info"></i></button></td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                    <form method="POST" action="{% url "saleUpdate" sale.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">مرتجع عملية بيع</h3>
+                                            <br>
+                                            <i class="fa-solid fa-clock-rotate-left" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="restore" class="sellbtn">مرتجع</button>
+                                    </form>
+                                    '><i class="fa-solid fa-clock-rotate-left"></i></button></td>
+                            </tr>
+                            {% endfor %}
+                            {% for restore in restores %}
+                            <tr style="background-color: #eddddd;">
+                                <td>{{restore.total}}</td>
+                                <td>{{restore.paid}}</td>
+                                <td>{{restore.method}}</td>
+                                <td>{{restore.date|date:"20y/m/d"}}</td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                    <form method="POST" action="{% url "restoreDelete" restore.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">حذف عملية بيع</h3>
+                                            <br>
+                                            <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="restoreDelete" class="sellbtn">حذف</button>
+                                    </form>
+                                    '><i class="fa-solid fa-trash-can"></i></button></td>
+                                    <td><button class="sellinfo" id="sellsup" metadata='
+                                        <form method="post" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                            <h3 style="color:#3D4B64;">تفاصيل البيع</h3>
+                                            <div class="addsell">
+                                                <ul>
+                                                    <li>اسم المنتج : <span>{{restore.item.name}}</span></li>
+                                                    <li>النوع : <span>{{restore.item.kind.name}}</span></li>
+                                                    <li>الماركة : <span>{{restore.item.prand}}</span></li>
+                                                    <li>سعر بيع المنتج : <span>{{restore.sale_price}}</span></li>
+                                                    <li> الكمية المباعة : <span>{{restore.sale_quantity}}</span></li>
+                                                    <li> اجمالي التكلفة : <span>{{restore.total}}</span></li>
+                                                </ul>
+                                            </div>
+                                    '><i class="fa-solid fa-info"></i></button></td>
+                                    <td colspan="2"> <h3 style="color: #e55352;">مرتجع</h3></td>
+                            </tr>
+                            {% endfor %}
+                            {% for date_group in sales_by_date %}
+                            <tr class="subtotal" id="subtotal" style="background:rgb(255, 225, 0);">
+                                <td colspan="4">اجمالى فاتورة</td>
+                                <td style="display: none;"></td>
+                                <td colspan="3">{{ date_group.total_meal}} جنيه</td>
+                                <td style="display: none;">{{ date_group.date|date:"20y/m/d"}}</td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                            {% for payment in payments %}
+                            <tr class="paied" id="paied" style="    background-color: #02CBF2;color: #FFFFFF;">
+                                <td style="display: none;">{{ payment.date|date:"20y/m/d"}}</td>
+                                <td>{{ payment.paid_money }}</td>
+                                <td colspan="2">تم دفع</td>
+                                <td>{{ payment.date|date:"20y/m/d" }}</td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                <form method="post" action="{% url "paydelete" payment.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                    {% csrf_token %}
+                                    <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                        <h3 style="color:#3D4B64;">حذف دفع</h3>
+                                        <br>
+                                        <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                        <br>
+                                    </div>
+                                    <button name="paydelete" class="sellbtn">حذف</button>
+                                </form>
+                                '><i class="fa-solid fa-trash-can"></i></button></td>
+                                <td><button class="sellsup" id="sellsup" metadata='
+                                    <form method="post" action="{% url "paymentUpdate" payment.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <h3 style="color:#3D4B64;">تعديل دفع</h3>
+                                    <div class="addsell">
+                                        <div class="wraper" style="width: 20%;">
+                                            <div class="second">
+                                                <input value="{{payment.paid_money}}" min="0" name="paid_money" type="number" id="search_bar" class="search_bar" required>
+                                                <span>المدفوع</span>
+                                            </div>
+                                        </div>
+                                        <div class="wraper" style="width: 20%;margin:10px;">
+                                            <div class="second">
+                                                <select name="method"  style="font-size:18px;" id="search_bar" class="search_bar">
+                                                    <option style="font-size:18px;" value="{{payment.method}}">{{payment.method}}</option>
+                                                    <option style="font-size:18px;" value="نقدية">نقدية</option>
+                                                    <option style="font-size:18px;" value="محفظة">محفظة</option>
+                                                </select>
+                                                <span>طريقة الدفع</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button name="payupdate" class="sellbtn">تعديل</button>
+                                </form>
+                                '><i class="fa-solid fa-pencil"></i></button></td>
+                                <td colspan="2"></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="btnnav">
+                        <div>
+                            {% if sales.has_previous %}
+                            <a href="?page=1"><i class="fa-solid fa-angles-right"></i></a>
+                            <a href="?page={{ sales.previous_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>
+                            {% endif %}
+                            <p>صفحة {{ sales.number }} من {{ sales.paginator.num_pages }}</p>
+                    </div>
+                    
+                    <div>
+                        {% if sales.has_next %}
+                        <a href="?page={{ sales.next_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>
+                        <a href="?page={{ sales.paginator.num_pages }}"><i class="fa-solid fa-angles-left"></i></a>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                {% else %}
+                <h2 style="width: 100%;text-align: center;color: #02CBF2;margin-bottom: 20px;">لا يوجد مبيعات</h2>
+                {% endif %}    </div>
+        </div>
+    </div>
+
+    <script src=" {% static "js/select.js" %} "></script>
+    <script src=" {% static "js/bill.js" %} "></script>
+    <script>
+        // Function to sort table rows based on date and time
+        function sortTable() {
+            var table, rows, switching, i, x, y, shouldSwitch;
+            table = document.getElementById("myTable");
+            switching = true;
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < rows.length - 1; i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[3].innerText; // Assuming date is in the second column
+                    y = rows[i + 1].getElementsByTagName("td")[3].innerText;
+                    if (x.localeCompare(y) < 0) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+        // Call the sortTable function after the document is fully loaded
+        window.onload = function () {
+            sortTable();
+        };
+        sortTable();
+    </script>
+
+</body>
+</html>

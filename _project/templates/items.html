@@ -1,0 +1,255 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>items</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <header>
+        <div class="main">
+            <div class="minhead">
+                <i class="fa-solid fa-bars" id="rightconexpend"></i>
+            </div>
+            <ul>
+                <li class="selected"><a href="{% url "items" %}">صفحة البضاعة</a></li>
+            </ul>
+        </div>
+        <div class="username">
+                <a href="{% url "logout" %}"><i class="fa-solid fa-power-off"></i></a>
+                <h3>{{user.username}}<h3>
+        </div>
+    </header>
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <div class="rightcon">
+            <ul>
+                <a href="{% url "home" %}">
+                    <li>
+                        <i class="fa-solid fa-house-circle-check"></i>
+                        <span>الرئيسية</span>
+                    </li>
+                </a>
+                <a href= "{% url "sales" %}">
+                    <li>
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>بيع</span>
+                    </li>
+                </a>
+                <a href="{% url "tempsales" %}">
+                    <li>
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <span>الاجل</span>
+                    </li>
+                </a>
+                <a href="{% url "loses" %}">
+                    <li>
+                        <i class="fa-solid fa-file-export"></i>
+                        <span>المصروفات</span>
+                    </li>
+                </a>
+                <a href="{% url "items" %}">
+                    <li class="activeli">
+                        <i class="fa-brands fa-airbnb"></i>
+                        <span>اضافة بضاعة</span>
+                    </li>
+                </a>
+                <a href="{% url "profits" %}">
+                    <li>
+                        <i class="fa-solid fa-table-cells"></i>
+                        <span>المبيعات</span>
+                    </li>
+                </a>
+                <a href="{% url "shorts" %}">
+                    <li>
+                        <i class="fa-solid fa-arrow-down-short-wide"></i>
+                        <span>النواقص</span>
+                    </li>
+                </a>
+                <a href="{% url "daycome" %}">
+                    <li>
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span>صفحة الادمن</span>
+                    </li>
+                </a>
+            </ul>
+        </div>
+        <div class="leftcon">
+            <div style="width: 100%;display: flex;align-items: center;justify-content: space-around;flex-direction: row;">
+                <form method="post" action="" class="othersell">
+                    {% csrf_token %}
+                    <div class="addinputs">
+                        <input name='name' type="text" id="search_bar" class="search_bar" required placeholder="اسم البضاعة">
+                        <select name="kind" class="search_bar" id="">
+                            {% for kind in kinds %}
+                            <option value="{{kind.name}}">{{kind.name}}</option>
+                            {% endfor %}
+                        </select>
+                        <input name='prand'  type="text" id="papers" class="search_bar" placeholder="الماركة" required >
+                        <input name='quantity'  type="number" id="papers" class="search_bar" min="0" required placeholder="الكمية">
+                        <input name='price' step="0.01"  type="number" id="price" class="search_bar" min="0" required placeholder="السعر">
+                        <input name='supname' step="0.01"  type="text" id="price" class="search_bar" min="0" required placeholder="اسم المورد">
+                    </div>
+                    <button name="addItem" class="sellbtn">تأكيد</button>
+                </form>
+                <div class="totdiv">
+                    <img src="{% static "images/items.png" %}" style="width:100%;">
+                    <h2 id="totnum">اجمالى مبلغ البضاعة <span style="color: rgb(27, 173, 27);font-size: 18px;font-weight: 300;">{{item_value_total}}</span> جنيه</h2>
+                </div>    
+            </div>
+            <div class="status">
+                <h2>جميع البضاعه</h2>
+                <form method="post" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                    {% csrf_token %}
+                    <div class="addsell">
+                        <div class="wraper">
+                            <div class="first">
+                                <input  name="searchInput" value="{{request.POST.searchInput}}" type="text" id="search_bar" class="search_bar" required >
+                                <span>بحث</span>
+                            </div>
+                        </div>
+                        <button name="search" class="sellbtn" style="width: 40px;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <a href="{% url "items" %}" class="sellbtn" style="width: 40px; text-align:center;"><i class="fa-solid fa-arrows-rotate"></i></a>
+                    </div>
+                </form> 
+                <div style="width: 100%; overflow: scroll; height: fit-content;">
+                    {% if items %}
+                    <table class="sellstable">
+                        <thead>
+                            <tr>
+                                <th>الكود</th>
+                                <th>الاسم</th>
+                                <th>النوع</th>
+                                <th>الماركة</th>
+                                <th>الكمية</th>
+                                <th>السعر</th>
+                                <th>تاريخ</th>
+                                <th>حذف</th>
+                                <th>تعديل</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in items %}
+                            <tr>
+                                <td>{{item.id}}</td>
+                                <td>{{item.name}}</td>
+                                <td>{{item.kind.name}}</td>
+                                <td>{{item.prand}}</td>
+                                <td>{{item.quantity}}</td>
+                                <td>{{item.price}}</td>
+                                <td>{{item.date|date:"20y/m/d"}}</td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                    <form method="post" action="{% url "itemDelete" item.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">حذف المنتج</h3>
+                                            <h3 style="color:#FF0000;">"حذف المنتج سيؤدى الى حذف جميع المتعلقات بها"</h3>
+                                            <br>
+                                            <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="itemDelete" class="sellbtn">حذف</button>
+                                    </form>
+                                    '><i class="fa-solid fa-trash-can"></i></button></td>
+                                    <td><button class="sellsup" id="sellsup" metadata='
+                                        <form method="post" action="{% url "itemUpdate" item.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                            {% csrf_token %}
+                                            <h3 style="color:#3D4B64;">تعديل عملية</h3>
+                                            <div class="addsell" style="padding-top: 70px;">
+                                                <div class="wraper" style="position: absolute;  left: 35%; top: 20%;z-index: 15;">
+                                                    <div class="first">
+                                                        <input value="{{item.name}}" name="name" type="text" id="search_bar" class="search_bar" required >
+                                                        <span>اسم المنتج</span>
+                                                    </div>
+                                                    <div class="search_res" id="search_res">
+                                                        <table id="suplliersull">
+                                                            <th></th>
+                                                            <tbody id="suplliersul">
+                                                                <tr><td></td></tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="wraper">
+                                                    <div class="first">
+                                                        <select name="kind_name" class="search_bar" id="">
+                                                            <option value="{{item.kind.name}}">{{item.kind.name}}</option>
+                                                            {% for kind in kinds %}
+                                                            <option value="{{kind.name}}">{{kind.name}}</option>
+                                                            {% endfor %}
+                                                        </select>
+                                                        <span>النوع</span>
+                                                    </div>
+                                                </div>
+                                                <div class="wraper" style="width: 20%;">
+                                                <div class="second">
+                                                    <input value="{{item.prand}}"  name="prand" type="text" id="search_bar" class="search_bar" required>
+                                                    <span>الماركة</span>
+                                                </div>
+                                            </div>
+                                            <div class="wraper" style="width: 20%;">
+                                                <div class="second">
+                                                    <input value="{{item.quantity}}"  min="0" name="quantity" type="number" id="search_bar" class="search_bar" required>
+                                                    <span>الكمية</span>
+                                                </div>
+                                            </div>
+                                            <div class="wraper" style="width: 20%;">
+                                                <div class="second">
+                                                    <input value="{{item.price}}" min="0" name="price" type="number" id="search_bar" class="search_bar" required >
+                                                    <span>السعر</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button name="itemUpdate" class="sellbtn">تعديل</button>
+                                    </form>
+                                    '><i class="fa-solid fa-pencil"></i></button></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="btnnav">
+                            <div>
+                                {% if items.has_previous %}
+                                <a href="?page=1"><i class="fa-solid fa-angles-right"></i></a>
+                                <a href="?page={{ items.previous_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>
+                                {% endif %}
+                                <p>صفحة {{ items.number }} من {{ items.paginator.num_pages }}</p>
+                            </div>
+                            <div>
+                                {% if items.has_next %}
+                                <a href="?page={{ items.next_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>
+                                <a href="?page={{ items.paginator.num_pages }}"><i class="fa-solid fa-angles-left"></i></a>
+                                {% endif %}
+        
+                            </div>
+                        </div>
+                        {% else %}
+                        <h2 style="width: 100%;text-align: center;color: #303C54;margin-bottom: 20px;">لا يوجد بضاعة</h2>
+                        {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src=" {% static "js/select.js" %} "></script>
+    <script src=" {% static "js/home.js" %} "></script>
+    <script>
+    </script>
+</body>
+</html>

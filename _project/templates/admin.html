@@ -1,0 +1,200 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>admin page</title>
+</head>
+<body>
+    <header>
+        <div class="main">
+            <div class="minhead">
+                <i class="fa-solid fa-bars" id="rightconexpend"></i>
+            </div>
+            <ul>
+                <li class="selected"><a href="{% url "daycome" %}">صفحة الادمن</a></li>
+            </ul>
+        </div>
+        <div class="username">
+                <a href="{% url "logout" %}"><i class="fa-solid fa-power-off"></i></a>
+                <h3>{{user.username}}<h3>
+        </div>
+    </header>
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <div class="rightcon">
+            <ul>
+                <a href="{% url "home" %}">
+                    <li>
+                        <i class="fa-solid fa-house-circle-check"></i>
+                        <span>الرئيسية</span>
+                    </li>
+                </a>
+                <a href= "{% url "sales" %}">
+                    <li>
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>بيع</span>
+                    </li>
+                </a>
+                <a href="{% url "tempsales" %}">
+                    <li>
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <span>الاجل</span>
+                    </li>
+                </a>
+                <a href="{% url "loses" %}">
+                    <li>
+                        <i class="fa-solid fa-file-export"></i>
+                        <span>المصروفات</span>
+                    </li>
+                </a>
+                <a href="{% url "items" %}">
+                    <li >
+                        <i class="fa-brands fa-airbnb"></i>
+                        <span>اضافة بضاعة</span>
+                    </li>
+                </a>
+                <a href="{% url "profits" %}">
+                    <li>
+                        <i class="fa-solid fa-table-cells"></i>
+                        <span>المبيعات</span>
+                    </li>
+                </a>
+                <a href="{% url "shorts" %}">
+                    <li>
+                        <i class="fa-solid fa-arrow-down-short-wide"></i>
+                        <span>النواقص</span>
+                    </li>
+                </a>
+                <a href="{% url "daycome" %}">
+                    <li class="activeli">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span>صفحة الادمن</span>
+                    </li>
+                </a>
+            </ul>
+        </div>
+        <div class="leftcon">
+            <div class="status">
+                <ul class="secnav">
+                    <li><a href="{% url "daycome" %}">تقفيل اليوم</a></li>
+                    <li class="active"><a href="{% url "admin" %}">لوحة الادمن</a></li>
+                    <li><a href="{% url "employees" %}">الموظفين</a></li>
+                    <li><a href="{% url "safe" %}">الخزنة</a></li>
+                </ul>
+            </div>
+            <div class="status">
+                <div class="bars-data">
+                    <canvas id="myChart"></canvas>
+                    <canvas id="myChart2"></canvas>
+                </div> <br>
+                    <div class="title" id="reports">
+                        <h3>التقارير</h3>
+                        <input id="searchbar" type="date">
+                    </div><br>
+                    <div style="width: 100%;overflow: auto;">
+                        <table class="sellstable">
+                            <thead>
+                                <tr>
+                                    <th>نوع العملية</th>
+                                    <th>اسم المستخدم</th>
+                                    <th>التاريخ</th>
+                                    <th>الوقت</th>
+                                    <th>التفاصيل</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablebody1">
+                                {% for action in recent_actions %}
+                                <tr>
+                                    <td>{{action.action_type}}</td>
+                                    <td> {{action.user}}</td>
+                                    <td>{{action.timestamp|date:"20y-m-d"}}</td>
+                                    <td>{{action.timestamp|time}}</td>
+                                    <td>{{action.model_affected}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>   
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const rightconexpend = document.getElementById('rightconexpend')
+            const rightcon = document.querySelector('.rightcon')
+            //-----------------------------------------------------------------------------------------------------------
+            //right container menu size funcion 
+            rightconexpend.addEventListener('click',()=>{
+                rightcon.classList.toggle( "active" );
+            })
+            const ctx = document.getElementById('myChart');
+            const ctx2 = document.getElementById('myChart2');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['سبت', 'أحد', 'اثنين', 'ثلاثاء', 'اربعاء', 'خميس', 'جمعه'],
+                    datasets: [{
+                    label: 'مبيعات الاسبوع',
+                    data: [
+                    {{ sales_data.7 }},  
+                    {{ sales_data.1 }},  
+                    {{ sales_data.2 }},  
+                    {{ sales_data.3 }},  
+                    {{ sales_data.4 }},  
+                    {{ sales_data.5 }},  
+                    {{ sales_data.6 }}   
+                ],                    borderWidth: 1,
+                    borderColor: "#02CBF2",
+                    backgroundColor:"#02CBF2",
+                }]
+                },
+                options: {
+                scales: {
+                    y: {
+                    beginAtZero: true
+                    }
+                }}
+            });
+            new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: ['هادر', 'مصروف', 'ايجار', 'ديون', 'اخرى'],
+            datasets: [{
+                label: 'مصروفات الشهر ',
+                data: [{{ waste }}, {{ loses }}, {{ rent }}, {{ depts }}, {{ other }}],
+                borderWidth: 1,
+                borderColor: [
+                    "#097782",
+                    '#02CBF2',
+                    '#E8E8E8',
+                    '#E8E8E8',
+                    '#E8E8E8',
+                ],
+                backgroundColor: [
+                    'red',
+                    'green',
+                    'yellow',
+                    '#02CBF2',
+                    '#E8E8E8',
+                ]
+            }]
+            },
+            options: {
+            scales: {
+                y: {
+                beginAtZero: true
+                }
+            }}
+        });
+        </script>
+    </body>
+</html>

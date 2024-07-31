@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>employee page</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer" style="overflow-y: auto;">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <a href="{% url "employees" %}" class="backbtn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="leftcon" style="width: 100%;">
+            <div class="status">
+                <h2>صفحــة الموظف </h2>
+                <div style="width: 100%;display: flex;justify-content: space-around;align-items: center;padding: 20px 0;">
+                <h2>اسم الموظف : <span>{{employee.name}}</span></h2>
+                <h2>الوظيفة: <span>{{employee.job}}</span></h2>
+                <h2>المرتب : <span>{{employee.salary}}</span></h2>
+                <h2>صافي المرتب للشهر الحالي : <span>{{employee.rest_salary}}</span></h2>
+                </div>
+                <div style="width: 100%;display: flex;justify-content: space-around;align-items: center;padding: 20px 0;">
+                    <button class="sellbtn" id="billbtn"  metadata='
+                    <form method="POST" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                    {% csrf_token %}
+                            <h3 style="color:#3D4B64;">اضافة سلفة</h3>
+                        <div class="addsell" style="display:flex; align-items:start;flex-direction:column;">
+                            <div style="width:100%; display:flex;align-items:center;justify-content:center;flex-direction:row;gap:10px;position:relative;padding-top:60px;">
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input name= "amount" value="" type="number" id="price_input" class="search_bar" >
+                                        <span>المبلغ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button name="addLoan" class="sellbtn" id="billmakebtn">اضافة سلفة</button>
+                    </form>'>سلفة</button>
+                    <button style="background:red;" class="sellbtn" id="billbtn"  metadata='
+                    <form method="POST" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                            <h3 style="color:#3D4B64;">اضافة خصم</h3>
+                        <div class="addsell" style="display:flex; align-items:start;flex-direction:column;">
+                            <div style="width:100%; display:flex;align-items:center;justify-content:center;flex-direction:row;gap:10px;position:relative;padding-top:60px;">
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input name= "amount" value="" type="number" id="price_input" class="search_bar" >
+                                        <span>المبلغ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button name="addDeduction" class="sellbtn" id="billmakebtn">خصم</button>
+                    </form>'>خصم</button>
+                    <button style="background:green;" class="sellbtn" id="billbtn"  metadata='
+                    <form method="POST" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                            <h3 style="color:#3D4B64;">اضافة مكافأة</h3>
+                        <div class="addsell" style="display:flex; align-items:start;flex-direction:column;">
+                            <div style="width:100%; display:flex;align-items:center;justify-content:center;flex-direction:row;gap:10px;position:relative;padding-top:60px;">
+                                <div class="wraper" style="width: 50%;margin:10px;">
+                                    <div class="second">
+                                        <input name= "amount" value="" type="number" id="price_input" class="search_bar" >
+                                        <span>المبلغ</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button name="addPrize" class="sellbtn" id="billmakebtn">خصم</button>
+                    </form>'>مكافأة</button>
+                    <button style="background:#9b9b1b;" class="sellbtn" id="billbtn"  metadata='
+                    <form method="POST" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                        <br>
+                            <h3 style="color:#3D4B64;">سيتم تصفية جميع السلف و الجزاءات و العلاوات</h3>
+                        <div class="addsell" style="display:flex; align-items:start;flex-direction:column;">
+                            <div style="width:100%; display:flex;align-items:center;justify-content:center;flex-direction:row;gap:10px;position:relative;padding-top:60px;">
+                            </div>
+                        </div>
+                        <button name="settlement" class="sellbtn" id="billmakebtn">تصفية</button>
+                    </form>'>تصفية</button>
+                </div>
+            </div>
+            <div class="status">
+                <div style="width: 100%; overflow: scroll;">
+                    {% if loans or deductions or prizes %}
+                    <table class="sellstable" id="myTable">
+                    </table>
+                </div>
+                {% else %}
+                <h2 style="width: 100%;text-align: center;color: #02CBF2;margin-bottom: 20px;">لا يوجد سلف او جزاءات</h2>
+                {% endif %}    </div>
+        </div>
+    </div>
+
+    <script src=" {% static "js/select.js" %} "></script>
+    <script src=" {% static "js/bill.js" %} "></script>
+
+
+</body>
+</html>

@@ -1,0 +1,296 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Alexandria", sans-serif;
+    direction: rtl;
+}
+:root{
+    --main-color:#EBFCFF;
+    --sec-color:#00B7EB;
+    --white-color:#FFFFFF;
+    --black-color:#000000;
+    --gray-color:#979797;
+    --green-color:#ABF6A9;
+    --yellow-color:#FFE68D;
+    --trans3:0.3s ease;
+}
+select option {
+    background-color: var(--sec-color);
+    cursor: pointer;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    overflow: hidden;
+    width: 100%;
+    height: 100vh;
+    background-color: var(--white-color);
+}
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-direction: row;
+    width: 100%;
+    padding: 10px 15px;
+    background: var(--white-color);
+    opacity: 0;
+    animation: showcoontent2 0.3s ease-in-out  0.3s 1 forwards;
+}
+.mainnav{
+    background: transparent;
+    text-decoration: none;
+    padding: 0px;
+    border: none;
+    border-radius: 0;
+}
+.mainnav:hover{background: transparent;}
+header div{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--white-color);
+}
+header img{width: 40px;}
+
+.main{
+    width: 50%;
+}
+.main i{
+    font-size: 20px;
+    color: var(--black-color);
+}
+.main ul{
+    width: 25%;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+.main ul li{
+    background-color: transparent;
+    width: 100%;
+    cursor: pointer;
+    padding: 5px;
+    border-bottom: 2px solid var(--white-color);
+}
+.main ul li:hover,.main ul li.selected{
+    border-bottom:2px solid var(--sec-color);
+}
+.main ul li a{
+    text-decoration: none;
+    width: 100%;
+    color: var(--sec-color);
+    font-size: 20px;
+    font-weight: 400;
+}
+.username{
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+}
+.username .search{
+    width: 60%;
+    background-color: var(--white-color);
+}
+.username .search input{
+    height: 40px;
+    width: 85%;
+    padding: 0 10px;
+    border-radius: 10px;
+    background-color: transparent;
+    font-size: 18px;
+    border: 1px solid var(--gray-color);
+    outline: none;
+    color: var(--gray-color);
+}
+.username .search i{
+    background-color: var(--sec-color);
+    color: var(--white-color);
+    cursor: pointer;
+    font-size: 20px;
+    width: 40px ;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.username a{
+    text-decoration: none;
+    color: var(--black-color);
+    padding: 10px;
+    font-size: 20px;
+    border-radius: 50%;
+    transition: var(--trans3);
+}
+header h3{
+    font-size: 20px;
+    color: var(--black-color);
+    font-weight: 600;    
+}
+.username a:hover{
+    transform: scale(1.15);
+    color: var(--sec-color);
+}
+.backcon::-webkit-scrollbar{
+    width: 10px;
+    background-color: transparent;
+}
+.backcon::-webkit-scrollbar-thumb{background-color: var(--sec-color);}
+.backcon{
+    position: relative;
+    width: 98%;
+    height: 90vh;
+    background:var(--white-color) ;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: auto;
+    opacity: 0;
+    animation: showcoontent 0.3s ease-in-out  0.3s 1 forwards;
+}
+.backcon a{
+    text-decoration: none;
+    width: 90%;
+    min-height: 50%;
+    color: var(--black-color);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: row;
+    transition: var(--trans3);
+}
+.backcon a:nth-child(even){
+    flex-direction: row-reverse;
+}
+.backcon a:hover{background-color:#97979756;border-radius: 10px;}
+.backcon a img{width: 25%;}
+.backcon a .card{
+    width: 70%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 10%; 
+}
+.backcon a:nth-child(even) .card{
+    align-items: end;
+}
+
+.backcon a .card h3{
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--black-color);
+    width: 20%;
+    padding: 20px 0;
+    text-align: end;
+    border-bottom: 2px solid var(--black-color);
+}
+.backcon a:nth-child(even) .card h3{text-align: start;}
+
+.backcon a .card p{
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--gray-color);
+}
+.backcon a .card .tag{
+    color: var(--sec-color);
+}
+
+/*---------------------- keyframes ----------------------------------*/
+@keyframes fadeOut {
+    0% {
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+    25%,50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    75% {
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+@keyframes showcoontent {
+    from{
+        opacity: 0;
+        transform: translate(0,100px);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+@keyframes showcoontent2 {
+    from{
+        opacity: 0;
+        transform: translate(0,-100px);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+@keyframes showcoontent3 {
+    from{
+        opacity: 0;
+        transform: translate(-100px,0);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+@keyframes showcoontent4 {
+    from{
+        opacity: 0;
+        transform: translate(100px,0);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+/*---------------------- end keyframes ----------------------------------*/
+/*---------------------- responsive style ----------------------------------*/
+
+@media (max-width:1080px) {
+    .main ul{width: 80%;}
+    .username{justify-content: end;}
+    .main ul li a{font-size: 15px;}
+    .username .search{display: none;}
+    .backcon a img{display: none;}
+    .backcon a {min-height: 25%;}
+    .backcon a .card{ width: 100%;border-bottom: 1px solid var(--gray-color);}
+    .backcon a .card h3{
+        width: 40%;
+    }
+    .backcon a:nth-child(even){
+        flex-direction: row;
+    }
+    .backcon a:nth-child(even) .card{
+        align-items: start;
+    }
+    .backcon a:nth-child(even) .card h3{text-align: end;}
+    
+}
+/*---------------------- end responsive style ----------------------------------*/

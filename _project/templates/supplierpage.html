@@ -1,0 +1,96 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>supplier page</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer" style="overflow-y: auto;">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <a href="{% url "suppliers" %}" class="backbtn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="leftcon" style="width: 100%;">
+            <div class="status">
+                <h2>صفحــة المورد </h2>
+                <div style="width: 100%;display: flex;justify-content: space-around;align-items: center;padding: 20px 0;">
+                    <h2>اسم المورد : <span>{{supplier.name}}</span></h2>
+                    <h2>له : <span>{{supplier.for_him}}</span></h2>
+                </div>
+            </div>
+            <div class="status">
+                <div style="width: 100%; overflow: scroll;">
+                    {% if payments %}
+                    <table class="sellstable">
+                        <thead>
+                            <tr>
+                                <th>المبلغ</th>
+                                <th>التاريخ</th>
+                                <th>حذف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in payments %}
+                            <tr>
+                                <td>{{payment.paid}}</td>
+                                <td>{{payment.date|date:"20y/m/d"}}</td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                    <form method="post" action="{% url "supplierpaydelete" payment.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">حذف سداد دين</h3>
+                                            <br>
+                                            <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="supplierPayDelete" class="sellbtn">حذف</button>
+                                    </form>
+                                    '><i class="fa-solid fa-trash-can"></i></button></td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                </div>
+                    <div class="btnnav">
+                        <div>
+                            {% if payments.has_previous %}
+                            <a href="?page=1"><i class="fa-solid fa-angles-right"></i></a>
+                            <a href="?page={{ payments.previous_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>
+                            {% endif %}
+                            <p>صفحة {{ payments.number }} من {{ payments.paginator.num_pages }}</p>
+                    </div>
+                    
+                    <div>
+                        {% if payments.has_next %}
+                        <a href="?page={{ payments.next_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>
+                        <a href="?page={{ payments.paginator.num_pages }}"><i class="fa-solid fa-angles-left"></i></a>
+                        {% endif %}
+                        
+                    </div>
+                </div>
+                {% else %}
+                <h2 style="width: 100%;text-align: center;color: #303C54;margin-bottom: 20px;">لا يوجد مبيعات</h2>
+                {% endif %}    </div>
+        </div>
+    </div>
+    <script src=" {% static "js/select.js" %} "></script>
+    <script src=" {% static "js/bill.js" %} "></script>
+
+</body>
+</html>

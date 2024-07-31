@@ -1,0 +1,292 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: "Alexandria", sans-serif;
+    direction: rtl;
+    transition: 0.2s ease-in-out;
+}
+:root{
+    --main-color:#EBFCFF;
+    --sec-color:#00B7EB;
+    --white-color:#FFFFFF;
+    --black-color:#000000;
+    --gray-color:#979797;
+    --green-color:#ABF6A9;
+    --yellow-color:#FFE68D;
+}
+.backcon{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: var(--main-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#tigerLogo{
+    position: absolute;
+    top: 1%;
+    right: 1%;
+    width: 100px;
+    opacity: 0;
+    animation: showcoontent4 0.6s ease-in-out  0.6s 1 forwards;
+}
+#image1{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    opacity: 0;
+    animation: showcoontent 0.6s ease-in-out  0.6s 1 forwards;
+}
+#image2{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20%;
+    opacity: 0;
+    animation: showcoontent3 0.6s ease-in-out  0.6s 1 forwards;
+}
+#image3{
+    position: absolute;
+    bottom: 0;
+    left: 1%;
+    width: 30%;
+    opacity: 0;
+    animation: showcoontent3 0.6s ease-in-out  0.6s 1 forwards;
+}
+#image4{
+    position: absolute;
+    bottom: 5%;
+    right: 0;
+    width: 20%;
+    opacity: 0;
+    animation: showcoontent4 0.6s ease-in-out  0.6s 1 forwards;     
+}
+.txt{
+    position: absolute;
+    top: 10%;
+    left: 15%;
+    color: #ebedef;
+    font-size: 20px;
+}
+.logcon{
+    width: 50%;
+    height: 70%;
+    background-color: transparent;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: column;
+    gap: 15%;
+    opacity: 0;
+    animation: showcoontent2 0.6s ease-in-out  0.6s 1 forwards;
+}
+.logcon h1{
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--black-color);
+}
+.logcon input{
+    width: 60%;
+    height: 40px;
+    outline: none;
+    border: none;
+    text-align: center;
+    background:var(--white-color);
+    padding:0 5px;
+    font-size: 20px;
+    font-weight: 400;
+    border-radius: 10px;
+    direction: rtl;
+    color: var(--black-color);
+    border: 1px solid var(--gray-color);
+}
+.logcon input:focus{
+    border-bottom: 3px solid var(--sec-color);
+}
+
+.logcon input::placeholder{
+    font-family: 800;
+    color: var(--gray-color);
+}
+.logcon button ,.logout{
+    color: #ebedef;
+    background: var(--sec-color);
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    width: 40%;
+    padding: 10px 0px;
+    font-size: 20px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: 0.5s ease;
+}
+.logcon button:hover ,.logout:hover{
+    background:#303C54;
+}
+.messages {
+    list-style-type: none;
+    z-index: 10000;
+}
+.success {
+    background-color: var(--white-color);
+    color: var(--sec-color);
+    position: fixed;
+    border-left: 5px solid var(--green-color);
+    top: 30px;
+    width: 500px;
+    left: 5%;
+    box-shadow: 1px 1px 15px var(--gray-color);
+    padding: 20px 15px 20px 20px;
+    border-radius: 10px;
+    font-size: 20px;
+    animation-name: fadeOut;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+}
+.success::before {
+    content: "✅";
+    margin-left: 10px;
+}
+.warning {
+    background-color: var(--white-color);
+    color: var(--sec-color);
+    position: fixed;
+    border-left: 5px solid #b81313;
+    top: 30px;
+    width: 500px;
+    left: 5%;
+    box-shadow: 1px 1px 15px var(--gray-color);
+    padding: 20px 15px 20px 20px;
+    border-radius: 10px;
+    font-size: 20px;
+    animation-name: fadeOut;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+}
+.error {
+    background-color: var(--white-color);
+    color: var(--sec-color);
+    position: fixed;
+    border-left: 5px solid #b81313;
+    top: 30px;
+    width: 500px;
+    left: 5%;
+    box-shadow: 1px 1px 15px var(--gray-color);
+    padding: 20px 15px 20px 20px;   
+    border-radius: 10px;
+    font-size: 20px;
+    animation-name: fadeOut;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    animation-delay: 2s;
+}
+
+.warning::before{
+    content: "⚠️";
+    margin-left: 10px;
+}
+
+.error::before {
+    content: "❌";
+    margin-left: 10px;
+} 
+/*---------------------- keyframes ----------------------------------*/
+@keyframes fadeOut {
+    0% {
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+    25%,50% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    75% {
+        transform: scale(0.5);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(0);
+        opacity: 0;
+    }
+}
+@keyframes showcoontent {
+    from{
+        opacity: 0;
+        transform: translate(0,100px);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+@keyframes showcoontent2 {
+    from{
+        opacity: 0;
+        transform: translate(0,-100px);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+@keyframes showcoontent3 {
+    from{
+        opacity: 0;
+        transform: translate(-100px,0);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+@keyframes showcoontent4 {
+    from{
+        opacity: 0;
+        transform: translate(100px,0);
+        filter: blur(30px);
+    }to{
+        opacity: 1;
+        transform: translate(0,0);
+        filter: blur(0px);
+    }
+}
+
+@media (max-width:1080px) {
+    .logcon{
+        height: 55%;
+        width:90%;
+        border-radius: 20px;
+        position: relative;
+        padding: 30px;
+    }
+    #tigerLogo{width: 100px;}
+    #image2{width: 50%;}
+    #image3{width: 50%;}
+    #image4{width: 50%;}
+    .logcon h1{
+        font-size: 20px;
+    }
+    .logcon input{
+        width: 90%;
+    }
+    .logcon button{
+        width: 90%;
+        font-size: 20px;
+    }
+    .success ,.warning ,.error{
+        width: 250px;
+        padding: 10px 5px 10px 10px;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+}

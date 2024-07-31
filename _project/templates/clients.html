@@ -1,0 +1,157 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>clients</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <a href="{% url "home" %}" class="backbtn"><i class="fa-solid fa-chevron-left"></i></a>
+        <div class="leftcon" style="width: 100%;">
+            <form method="post" action="" class="othersell">
+                <h3>اضافة عملاء</h3>
+                {% csrf_token %}
+                <div class="addinputs">
+                    <input  name="name" type="text" id="search_bar" class="search_bar" required placeholder="اسم العميل">
+                    <input  name="phone" type="number" id="search_bar" class="search_bar" placeholder="رقم التليفون">
+                    <input  name="opening_balance"  type="number" id="search_bar" class="search_bar" placeholder="الرصيد الافتتاحى">
+                </div>
+                    <button name="addClient" class="sellbtn">اضافة عميل</button>
+            </form> 
+            <div class="status">
+                <h2>العملاء</h2>
+                <form method="post" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                    {% csrf_token %}
+                    <div class="addsell">
+                        <div class="wraper">
+                            <div class="first">
+                                <input  name="searchInput" value="{{request.POST.searchInput}}" type="text" id="search_bar" class="search_bar" required >
+                                <span>بحث باسم العميل</span>
+                            </div>
+                            <div class="search_res" id="search_res">
+                                <table id="suplliersull">
+                                    <th></th>
+                                    <tbody id="suplliersul">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <button name="search" class="sellbtn" style="width: 40px;"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        <a href="{% url "clients" %}" class="sellbtn" style="width: 40px; text-align:center;"><i class="fa-solid fa-arrows-rotate"></i></a>
+                    </div>
+                </form> 
+                <div style="width: 100%; overflow: scroll; height: fit-content;">
+            {% if clients %}
+                    <table class="sellstable">
+
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>رقم التليفون</th>
+                                <th>الرصيد الافتتاحى</th>
+                                <th>عليه</th>
+                                <th>حذف</th>
+                                <th>تعديل</th>
+                                <th>عرض</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clients %}
+                            {% if client.name != "-" %}
+                            <tr>
+                                <td>{{client.name}}</td>
+                                <td>{{client.phone}}</td>
+                                <td>{{client.opening_balance}}</td>
+                                <td>{{client.rest}}</td>
+                                <td><button class="sellsdel" id="sellsdel" metadata='
+                                    <form method="post" action="{% url "clientDelete" client.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <div class="addsell" style="padding: 20px;flex-direction:column;">
+                                            <h3 style="color:#3D4B64;">حذف العميل</h3>
+                                            <h3 style="color:#FF0000;">"حذف العميل سيؤدى الى حذف جميع المتعلقات بها"</h3>
+                                            <br>
+                                            <i class="fa-regular fa-trash-can" style="color: #ff3333;font-size: 100px;"></i>
+                                            <br>
+                                        </div>
+                                        <button name="clientDelete" class="sellbtn">حذف</button>
+                                    </form>
+                                    '><i class="fa-solid fa-trash-can"></i></button></td>
+                                <td><button class="sellsup" id="sellsup" metadata='
+                                    <form method="post" action="{% url "clientUpdate" client.id %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                                        {% csrf_token %}
+                                        <h3 style="color:#3D4B64;">تعديل عميل</h3>
+                                        <div class="addsell">
+                                            <div class="wraper" style="width: 20%;">
+                                            <div class="second">
+                                                <input value="{{client.name}}"  name="name" type="text" id="search_bar" class="search_bar" required>
+                                                <span>الاسم</span>
+                                            </div>
+                                        </div>
+                                        <div class="wraper" style="width: 20%;">
+                                            <div class="second">
+                                                <input value="{{client.phone}}"  name="phone" type="number" id="search_bar" class="search_bar" >
+                                                <span>رقم التليفون</span>
+                                            </div>
+                                        </div>
+                                        <div class="wraper" style="width: 20%;">
+                                            <div class="second">
+                                                <input value="{{client.opening_balance}}"  min="0" name="opening_balance" type="number" id="search_bar" class="search_bar" required>
+                                                <span>الرصيد الافتتاحى</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button name="clientUpdate" class="sellbtn">تعديل</button>
+                                </form>
+                                '><i class="fa-solid fa-pencil"></i></button></td>
+                                <td><a href="{% url "clientpage" client.id %}" class="sellprod" style="text-decoration: none;">عرض</a></td>
+                                </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="btnnav">
+                            <div>
+                                {% if clients.has_previous %}
+                                <a href="?page=1"><i class="fa-solid fa-angles-right"></i></a>
+                                <a href="?page={{ clients.previous_page_number }}"><i class="fa-solid fa-chevron-right"></i></a>
+                                {% endif %}
+                                <p>صفحة {{ clients.number }} من {{ clients.paginator.num_pages }}</p>
+                            </div>
+                            <div>
+                                {% if clients.has_next %}
+                                <a href="?page={{ clients.next_page_number }}"><i class="fa-solid fa-chevron-left"></i></a>
+                                <a href="?page={{ clients.paginator.num_pages }}"><i class="fa-solid fa-angles-left"></i></a>
+                                {% endif %}
+        
+                            </div>
+                        </div>
+                        {% else %}
+                        <h2 style="width: 100%;text-align: center;color: #303C54;margin-bottom: 20px;">لا يوجد عملاء</h2>
+                        {% endif %}
+                    </div>
+            </div>
+            </div>
+    </div>
+    <script src=" {% static "js/minhome.js" %} "></script>
+</body>
+</html>

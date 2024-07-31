@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/home.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>Home page</title>
+    
+</head>
+<body>
+    <header>
+        <div class="main">
+            <i class="fa-solid fa-bars mainMenu" id="mainMenuBTN"></i>
+            <ul>
+                <li class="selected"><a href="{% url "home" %}">الصفحة الرئيسية</a></li>
+            </ul>
+        </div>
+        <div class="username">
+            <div class="search">
+                <input type="text" placeholder="بحث...">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            <div>
+                <a href="{% url "logout" %}"><i class="fa-solid fa-power-off"></i></a>
+                <h3>{{user.username}}<h3>
+            </div>
+        </div>
+    </header>
+    <section class="backcon">
+            <a href="{% url "sales" %}">
+                <div class="card">
+                    <h3> عمليات بيع</h3>
+                    <p>لقد زادت عمليات البيع بنسبة 4.5 عن الاسبوع الماضي وهذه نسببة جيدة </p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home3.png" %} ">
+            </a>
+            <a href="{% url "tempsales" %}">
+                <div class="card">
+                    <h3>الاجل</h3>
+                    <p>لقد زادت المبيعات المؤجلة بنسبة 7.9 عن الاسبوع الماضي وهذه نسببة جيدة </p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home2.png" %} ">
+            </a>
+            <a href="{% url "loses" %}">
+                <div class="card">
+                    <h3>المصروفات</h3>
+                    <p>لقد زادت المصروفات بنسبة 7.9 عن الاسبوع الماضي وهذه نسببة جيدة </p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home3.png" %} ">
+            </a>
+            <a href="{% url "daycome" %}">
+                <div class="card">
+                    <h3>تقفيل اليوم</h3>
+                    <p>لقد زادت نسب التقفيلات بنسبة 7.9 عن الاسبوع الماضي وهذه نسببة جيدة </p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home4.png" %} ">
+            </a>
+            <a href="{% url "profits" %}">
+                <div class="card">
+                    <h3>المبيعات</h3>
+                    <p>لقد زادت المبيعات بنسبة 7.9 عن الاسبوع الماضي وهذه نسببة جيدة </p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home3.png" %} ">
+            </a>
+            <a href="{% url "shorts" %}">
+                <div class="card">
+                    <h3>النواقص</h3>
+                    <p>هناك عدد {{shorts_number}} من النواقص حتى الان</p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home3.png" %} ">
+            </a>
+            <a href="{% url "items" %}">
+                <div class="card">
+                    <h3>اضافة بضاعة</h3>
+                    <p>لديك {{items_number}} عدد من البضائع</p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home4.png" %} ">
+            </a>
+            <a href="{% url "kinds" %}">
+                <div class="card">
+                    <h3>الانواع</h3>
+                    <p>ادخل انواع البضائع المستخدمة فى عمليات البيع</p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home4.png" %} ">
+            </a>
+            <a href="{% url "clients" %}">
+                <div class="card">
+                    <h3>العملاء</h3>
+                    <p>لديك {{clients_number}} عميل حتي الان</p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home2.png" %} ">
+            </a>
+            <a href="{% url "safe" %}">
+                <div class="card">
+                    <h3>الخزنة</h3>
+                    <p>لديك {{suppliers_number}} مورد حتى الان</p>
+                    <p class="tag">رؤية المزيد</p>
+                    
+                </div>
+                <img src=" {% static "images/home1.png" %} ">
+            </a>
+            <a href="{% url "suppliers" %}">
+                <div class="card">
+                    <h3>الموردين</h3>
+                    <p>لديك {{suppliers_number}} مورد حتى الان</p>
+                    <p class="tag">رؤية المزيد</p>
+                </div>
+                <img src=" {% static "images/home2.png" %} ">
+            </a>            
+    </section>
+</body>
+</html>

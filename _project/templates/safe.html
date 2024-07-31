@@ -1,0 +1,205 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href=" {% static "css/style.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/all.min.css" %} ">
+    <link rel="stylesheet" href=" {% static "css/fontawesome.min.css" %} ">
+    <title>safe</title>
+</head>
+<body>
+    {% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <header>
+        <div class="main">
+            <div class="minhead">
+                <i class="fa-solid fa-bars" id="rightconexpend"></i>
+            </div>
+            <ul>
+                <li class="selected"><a href="{% url "daycome" %}">صفحة الادمن</a></li>
+            </ul>
+        </div>
+        <div class="username">
+                <a href="{% url "logout" %}"><i class="fa-solid fa-power-off"></i></a>
+                <h3>{{user.username}}<h3>
+        </div>
+    </header>
+    <div class="window" id="windowcon">
+        <i id="closedetwin" class="fa-solid fa-xmark close" ></i>
+        <div id="detailcontainer">
+            
+        </div>
+    </div>
+    <div class="backcon">
+        <div class="rightcon">
+            <ul>
+                <a href="{% url "home" %}">
+                    <li>
+                        <i class="fa-solid fa-house-circle-check"></i>
+                        <span>الرئيسية</span>
+                    </li>
+                </a>
+                <a href= "{% url "sales" %}">
+                    <li>
+                        <i class="fa-solid fa-receipt"></i>
+                        <span>بيع</span>
+                    </li>
+                </a>
+                <a href="{% url "tempsales" %}">
+                    <li>
+                        <i class="fa-solid fa-hand-holding-dollar"></i>
+                        <span>الاجل</span>
+                    </li>
+                </a>
+                <a href="{% url "loses" %}">
+                    <li>
+                        <i class="fa-solid fa-file-export"></i>
+                        <span>المصروفات</span>
+                    </li>
+                </a>
+                <a href="{% url "items" %}">
+                    <li >
+                        <i class="fa-brands fa-airbnb"></i>
+                        <span>اضافة بضاعة</span>
+                    </li>
+                </a>
+                <a href="{% url "profits" %}">
+                    <li>
+                        <i class="fa-solid fa-table-cells"></i>
+                        <span>المبيعات</span>
+                    </li>
+                </a>
+                <a href="{% url "shorts" %}">
+                    <li>
+                        <i class="fa-solid fa-arrow-down-short-wide"></i>
+                        <span>النواقص</span>
+                    </li>
+                </a>
+                <a href="{% url "daycome" %}">
+                    <li class="activeli">
+                        <i class="fa-solid fa-user-tie"></i>
+                        <span>صفحة الادمن</span>
+                    </li>
+                </a>
+            </ul>
+        </div>
+        <div class="leftcon">
+            <div class="status">
+                <ul class="secnav">
+                    <li><a href="{% url "daycome" %}">تقفيل اليوم</a></li>
+                    <li><a href="{% url "admin" %}">لوحة الادمن</a></li>
+                    <li><a href="{% url "employees" %}">الموظفين</a></li>
+                    <li class="active"><a href="{% url "safe" %}">الخزنة</a></li>
+                </ul>
+            </div>
+            <div class="status">
+            <h2>ايداع</h2>
+            <form method="POST" class="addsell" style="width: 80%;">
+                {% csrf_token %}
+                <div class="addinputs">
+                    <input name='amount'  type="number" id="price" class="search_bar" min="0" required placeholder="المبلغ">
+                    <select name="kind" id=""class="search_bar">
+                        <option value="درج">درج</option>
+                        <option value="محفظة">محفظة</option>
+                    </select>
+                </div>
+                <button name="deposit" class="sellbtn">تأكيد</button>
+            </form>
+        </div>
+        <div style="display: flex;justify-content: space-around;align-items: center;flex-direction: row;height: 100%;width: 100%;gap: 15px;">
+            <div class="leftsafecon">
+                <h4>الدرج</h4>
+                <h2>رصيد الدرج : <span>{{safe.cash}}</span> جنيه <button class="sellsup" id="sellsup" metadata='
+                    <form method="post" action="{% url "safeUpdate" 1 %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                        <h3 style="color:#3D4B64;">تعديل رصيد</h3>
+                        <div class="addsell" style="align-items:center;justify-content: center;">
+                            <div class="wraper">
+                                <div class="second">
+                                    <input value="{{safe.cash}}"  min="0" name="cash" type="number" id="search_bar" class="search_bar" required>
+                                    <span>الرصيد</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button name="cashUpdate" class="sellbtn">تعديل</button>
+                    </form>
+                    '><i class="fa-solid fa-pencil"></i></button></h2><br>
+                <h4>رصيد الوارد  و المدفوعات النقدية خلال الشهر الحالي : <span>{{cash_month}}</span> جنيه </h4>
+                <h4>رصيد الوارد و المدفوعات النقدية الكلي : <span>{{safe.cash_paid}}</span> جنيه </h4>
+                <h4>المجموع : <span>{{safe.cash_total}}</span> جنيه </h4>
+                <button name="addItem" id="sellsup" class="sellbtn" style="width: 50%;" metadata='
+                <form method="post" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                    {% csrf_token %}
+                    <h3 style="color:#3D4B64;">ترحيل الى المحفظة</h3>
+                    <div class="addsell" style="align-items:center;justify-content: center;">                  
+                    <div class="wraper">
+                        <div class="second">
+                            <input min="0" name="ctw" type="number" id="search_bar" class="search_bar" required>
+                            <span>المبلغ</span>
+                        </div>
+                    </div>
+                </div>
+                <button name="cashToWallet" class="sellbtn">ترحيل</button>
+                </form>'>ترحيل الى المحفظة</button>
+            </div>
+            <div class="rightsafecon">
+                <h4>المحفظة</h4>
+                <h2>رصيد المحفظة : <span>{{safe.wallet}}</span> جنيه <button class="sellsup" id="sellsup" metadata='
+                    <form method="post" action="{% url "safeUpdate" 1 %}" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                        <h3 style="color:#3D4B64;">تعديل رصيد</h3>
+                        <div class="addsell" style="align-items:center;justify-content: center;">
+                            <div class="wraper">
+                                <div class="second">
+                                    <input value="{{safe.wallet}}"  min="0" name="wallet" type="number" id="search_bar" class="search_bar" required>
+                                    <span>الرصيد</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button name="walletUpdate" class="sellbtn">تعديل</button>
+                    </form>
+                    '><i class="fa-solid fa-pencil"></i></button></h2><br>
+                    <h4>رصيد وارد المحفظة خلال الشهر الحالي : <span>{{wallet_month}}</span> جنيه </h4>
+                    <h4>رصيد وارد المحفظة الكلي : <span>{{safe.wallet_paid}}</span> جنيه </h4>
+                    <h4>المجموع : <span>{{safe.wallet_total}}</span> جنيه </h4>
+                
+                <div style="display: flex;flex-direction: row;width: 100%;justify-content: space-around;align-items: center;">
+                    <button name="" id="sellsup" class="sellbtn" style="width: 50%;" metadata='
+                    <form method="post" action="" style="width: 100%;display: flex;align-items: center;justify-content: center;flex-direction: column;">
+                        {% csrf_token %}
+                        <h3 style="color:#3D4B64;">ترحيل الى الدرج</h3>
+                        <div class="addsell" style="align-items:center;justify-content: center;">                  
+                        <div class="wraper">
+                            <div class="second">
+                                <input min="0" name="wtc" type="number" id="search_bar" class="search_bar" required>
+                                <span>المبلغ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button name="walletToCash" class="sellbtn">ترحيل</button>
+                </form>'>ترحيل الى الدرج</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const rightconexpend = document.getElementById('rightconexpend')
+        const rightcon = document.querySelector('.rightcon')
+        //-----------------------------------------------------------------------------------------------------------
+        //right container menu size funcion 
+        rightconexpend.addEventListener('click',()=>{
+            rightcon.classList.toggle( "active" );
+        })
+    </script>
+
+    <script src=" {% static "js/minhome.js" %} "></script>
+</body>
+</html>
